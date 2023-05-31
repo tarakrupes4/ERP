@@ -1,0 +1,24 @@
+/* Add these CSS styles to your main CSS file or component */
+
+.sidebar {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    bottom: 0;
+    width: 200px;
+    background-color: #303132; /* Customize the background color as desired */
+    padding: 20px;
+  }
+  
+  .nav-item {
+    margin-bottom: 10px;
+  }
+  
+  .nav-link {
+    color: #000000; /* Customize the link color as desired */
+  }
+  
+
+  .nav{
+    position: fixed;
+  }
