@@ -10,12 +10,19 @@ import axios from 'axios';
 import {useEffect,useState} from 'react';
 import { Party } from './model/Party';
 import { StockArea } from './model/StockArea';
+import { Button } from '@mui/material';
+import ItemDetails from './ItemDetails';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../config/store';
+import { openAdd } from '../../config/isAddSlice';
 
 function Inward() {
   const [partyList,setPartyList] = useState([]);
   const [stockAreaList,setStockAreaList] = useState([]);
   const [party,setParty] = useState('');
-  const [stockArea,setStockArea] = useState('');
+  const [stockArea, setStockArea] = useState('');
+  const isAdd = useSelector((state: RootState) => state.isAdd.value);
+  const dispatch = useDispatch();
 
   const headers= {
     Authorization: localStorage.getItem('authToken')
@@ -111,10 +118,14 @@ function Inward() {
       </Box>
       <br/>
       <br/>
+      <div className = 'inwardItemDetails'>
       <h2>
         Inward Item Details
       </h2>
-      <hr/>
+        <Button  onClick={() =>dispatch(openAdd())}>Add</Button>
+      </div>
+      <hr />
+      {isAdd && (<ItemDetails />)}
     </div>
   )
 }
