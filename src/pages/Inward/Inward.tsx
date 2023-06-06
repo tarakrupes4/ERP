@@ -14,7 +14,7 @@ import { Button } from '@mui/material';
 import ItemDetails from './ItemDetails';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../config/store';
-import { openAdd } from '../../config/isAddSlice';
+import { openAdd,closeAdd } from '../../config/isAddSlice';
 
 function Inward() {
   const [partyList,setPartyList] = useState([]);
@@ -22,6 +22,10 @@ function Inward() {
   const [party,setParty] = useState('');
   const [stockArea, setStockArea] = useState('');
   const isAdd = useSelector((state: RootState) => state.isAdd.value);
+  const [material, setMaterial] = useState('');
+  const [materialList, setMaterialList] = useState([]);
+  const [totalQty, setTotalQty] = useState('');
+  const [price, setPrice] = useState('');
   const dispatch = useDispatch();
 
   const headers= {
@@ -48,6 +52,12 @@ function Inward() {
      }).catch((error)=>{
         alert(error);
      }) 
+    axios.get('http://3.109.238.224:20080/api/v1/chemical/item/getAllItem', { headers })
+      .then((res) => {
+        setMaterialList(res.data.dataList);
+      }).catch((error) => {
+        alert(error);
+      });
   },[])
 
   return (
@@ -118,14 +128,67 @@ function Inward() {
       </Box>
       <br/>
       <br/>
-      <div className = 'inwardItemDetails'>
-      <h2>
-        Inward Item Details
-      </h2>
-        <Button  onClick={() =>dispatch(openAdd())}>Add</Button>
-      </div>
-      <hr />
-      {isAdd && (<ItemDetails />)}
+      {isAdd ? (<div>
+        <div className='header'>
+          <h2>
+            Inward Item Details
+          </h2>
+          <Button
+            variant='outlined' color='error'
+            onClick={() => dispatch(closeAdd())}
+          >X</Button>
+        </div>
+        <hr />
+        <Box
+          component="form"
+          sx={{
+            '& .MuiTextField-root': { m: 1, width: '35ch' },
+          }}
+          noValidate
+          autoComplete="off"
+        >
+          <div>
+            <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+              <InputLabel id="demo-simple-select-standard-label">Material</InputLabel>
+              <Select
+                labelId="demo-simple-select-standard-label"
+                id="demo-simple-select"
+                value={material}
+                label="Material"
+                onChange={(event) => setMaterial(event.target.value)}
+              >
+                {materialList && materialList.length > 0 ? materialList.map((data: StockArea) => (
+                  <MenuItem value={data.id} key={data.id}>{data.name}</MenuItem>
+                )
+                ) : <MenuItem>None</MenuItem>}
+              </Select>
+            </FormControl>
+            <TextField
+              id="outlined-basic"
+              label="Total Quantity"
+              value={totalQty}
+              variant="outlined"
+              onChange={(event) => setTotalQty(event.target.value)} />
+            <TextField
+              id="outlined-basic"
+              label="Price"
+              variant="outlined"
+              value={price}
+              onChange={(event) => setPrice(event.target.value)} />
+          </div>
+        </Box>
+      </div>) :
+        (
+          <>
+            <div className='inwardItemDetails'>
+              <h2>
+                Inward Item Details
+              </h2>
+              <Button onClick={() => dispatch(openAdd())}>Add</Button>
+            </div>
+            <hr />
+          </>
+        )}
     </div>
   )
 }

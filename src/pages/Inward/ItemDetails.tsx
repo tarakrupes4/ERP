@@ -33,55 +33,54 @@ function ItemDetails() {
             });
     }, []);
     return (
-        <div className='popup-overlay'>
-            <h2>
-                Inward Item Details
-            </h2>
-            <Button
-                variant='outlined' color='error'
-                onClick={()=>dispatch(closeAdd())}
-            >X</Button>
+        <div>
+            <div className='header'>
+                <h2>
+                    Inward Item Details
+                </h2>
+                <Button
+                    variant='outlined' color='error'
+                    onClick={() => dispatch(closeAdd())}
+                >X</Button>
+            </div>
             <hr />
-            <Box component="form"
+            <Box
+                component="form"
                 sx={{
                     '& .MuiTextField-root': { m: 1, width: '35ch' },
                 }}
                 noValidate
-                autoComplete="off">
-                <FormControl variant="filled" sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    gap: '16px',
-                     minWidth: 300
-                }}>
-                    <InputLabel id="demo-simple-select-standard-label">Material</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-standard-label"
-                        id="demo-simple-select"
-                        value={material}
-                        label="Material"
-                        onChange={(event) => setMaterial(event.target.value)}
-                    >
-                        {materialList && materialList.length > 0 ? materialList.map((data: StockArea) => (
-                            <MenuItem value={data.id} key={data.id}>{data.name}</MenuItem>
-                        )
-                        ) : <MenuItem value={0}>None</MenuItem>}
-                    </Select>
+                autoComplete="off"
+            >
+                <div>
+                    <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+                        <InputLabel id="demo-simple-select-standard-label">Material</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-standard-label"
+                            id="demo-simple-select"
+                            value={material}
+                            label="Material"
+                            onChange={(event) => setMaterial(event.target.value)}
+                        >
+                            {materialList && materialList.length > 0 ? materialList.map((data: StockArea) => (
+                                <MenuItem value={data.id} key={data.id}>{data.name}</MenuItem>
+                            )
+                            ) : <MenuItem>None</MenuItem>}
+                        </Select>
+                    </FormControl>
                     <TextField
                         id="outlined-basic"
                         label="Total Quantity"
                         value={totalQty}
                         variant="outlined"
-                        onChange={(event)=>setTotalQty(event.target.value)} />
+                        onChange={(event) => setTotalQty(event.target.value)} />
                     <TextField
                         id="outlined-basic"
                         label="Price"
                         variant="outlined"
                         value={price}
                         onChange={(event) => setPrice(event.target.value)} />
-                    
-                </FormControl>
+                </div>
             </Box>
         </div>
     )

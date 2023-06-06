@@ -16,7 +16,7 @@ h2 {
         transform: translate(-50%, -50%);
         background-color: white;
         padding: 20px;
-        border-radius: 5px;
+        border-radius: 25px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         z-index: 9999;
         /* Additional styles for the popup */
@@ -24,4 +24,10 @@ h2 {
         width: 1000px;
         max-width: 90%;
         height: 500px;
-    }
+    } 
+
+        .header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
