@@ -2,12 +2,13 @@ import { useState } from "react";
 import { Grid, TextField, Button, Box, Container } from "@mui/material";
 import axios from "axios";
 import { error } from "console";
+import { useNavigate } from "react-router-dom";
 
-interface LoginProps{
-  setLoggedIn:(value:boolean)=>void
+interface LoginProps {
+  setLoggedIn: (value: boolean) => void
 }
 
-function Login({setLoggedIn}:LoginProps) {
+function Login({ setLoggedIn }: LoginProps) {
   const staff: {
     username: string;
     password: string;
@@ -15,6 +16,8 @@ function Login({setLoggedIn}:LoginProps) {
     username: "",
     password: "",
   };
+
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = () => {
@@ -24,6 +27,7 @@ function Login({setLoggedIn}:LoginProps) {
       .post("http://3.109.238.224:20080/login", staff)
       .then((response) => {
         setLoggedIn(true);
+        navigate("inward");
         console.log(true);
         const authToken = response.data.substring(
           response.data.indexOf("Bearer"),
@@ -46,8 +50,8 @@ function Login({setLoggedIn}:LoginProps) {
           alignItems: "center",
           height: "60vh",
           width: "50vh",
-          marginTop:"20vh",
-          marginLeft:"10vh",
+          marginTop: "20vh",
+          marginLeft: "10vh",
           boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
           border: "1px solid rgba(0, 0, 0, 0.1)",
           borderRadius: "20px",
@@ -64,7 +68,7 @@ function Login({setLoggedIn}:LoginProps) {
             <h2>Log <span>in</span></h2>
           </Grid>
           <Grid item>
-            <form onSubmit={handleSubmit}>
+            <form>
               <Grid container direction="column" spacing={2}>
                 <Grid item>
                   <TextField
@@ -85,7 +89,7 @@ function Login({setLoggedIn}:LoginProps) {
                   />
                 </Grid>
                 <Grid item>
-                  <Button variant="contained" color="primary" type="submit">
+                  <Button variant="contained" color="primary" onClick={()=>handleSubmit()}>
                     Login
                   </Button>
                 </Grid>

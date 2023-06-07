@@ -13,9 +13,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login setLoggedIn={setLoggedIn} />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/inward" element={<Inward />} />
-        <Route path="/inwardDetails" element={<ItemDetails />} />
+        <Route path="home" element={<Home />} />
+        <Route path="inward" element={<Inward />} />
+        <Route path="inwardDetails" element={<ItemDetails />} />
       </Routes>
     </BrowserRouter>
   );
