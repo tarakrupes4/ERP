@@ -14,7 +14,10 @@ import { Button } from '@mui/material';
 import ItemDetails from './ItemDetails';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../config/store';
-import { openAdd,closeAdd } from '../../config/isAddSlice';
+import { openAdd, closeAdd } from '../../config/isAddSlice';
+import { InwardItemDetails } from './model/InwardItemDetails';
+import { InwardDto } from './model/InwardDto';
+import InwardTable from './InwardTable';
 
 function Inward() {
   const [partyList,setPartyList] = useState([]);
@@ -24,14 +27,17 @@ function Inward() {
   const isAdd = useSelector((state: RootState) => state.isAdd.value);
   const [material, setMaterial] = useState('');
   const [materialList, setMaterialList] = useState([]);
-  const [totalQty, setTotalQty] = useState('');
-  const [price, setPrice] = useState('');
+  const [totalQty, setTotalQty] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [date, setDate] = useState('');
+  const [slipNo, setSlipNo] = useState('');
+  const [itemDetailsList, setItemDetailsList] = useState<InwardItemDetails[]>([]);
   const dispatch = useDispatch();
 
   const headers= {
     Authorization: localStorage.getItem('authToken')
   };
-  const [slipNo, setSlipNo] = useState('');
+  
 
   useEffect(()=>{
     axios.get('http://3.109.238.224:20080/api/v1/chemical/inward/getGrnUniqueID',{headers})
@@ -58,11 +64,42 @@ function Inward() {
       }).catch((error) => {
         alert(error);
       });
-  },[])
+  }, [])
+  
+  const handleSaveInward = () => {
+    const inwardDto: InwardDto = {
+      date: date,
+      partyId: parseInt(party),
+      stockAreaId: parseInt(stockArea),
+      grnNumber: slipNo,
+      inwardItemDetails: itemDetailsList
+    }
+    console.log(inwardDto);
+    axios.post('http://3.109.238.224:20080/api/v1/chemical/inward/save/v3',inwardDto, { headers })
+      .then((res) => {
+        console.log(res.data.data);
+      }).catch((error) => {
+        alert(error);
+      });
+  }
+
+  const createItemDetails = () => {
+    const item: InwardItemDetails = {
+      name: material,
+      quantity: totalQty,
+      price: price,
+      itemId : parseInt(material)
+    }
+    setItemDetailsList([...itemDetailsList, item]);
+  }
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(event.target.value);
+  };
 
   return (
     <div className='side container'>
-      <h2>Inward Detials</h2>
+      <h2>Inward</h2>
       <br /><hr />
       <br />
       <Box
@@ -75,10 +112,14 @@ function Inward() {
       >
         <div>
           <TextField
-            required
             id="outlined-required"
             label="Date"
-            defaultValue=""
+            type='date'
+            value={date}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={handleDateChange}
           />
           <TextField
             id="outlined-disabled"
@@ -134,7 +175,7 @@ function Inward() {
             Inward Item Details
           </h2>
           <Button
-            variant='outlined' color='error'
+            variant='contained' color='error' size="large"
             onClick={() => dispatch(closeAdd())}
           >X</Button>
         </div>
@@ -168,13 +209,14 @@ function Inward() {
               label="Total Quantity"
               value={totalQty}
               variant="outlined"
-              onChange={(event) => setTotalQty(event.target.value)} />
+              onChange={(event) => setTotalQty(parseInt(event.target.value))} />
             <TextField
               id="outlined-basic"
               label="Price"
               variant="outlined"
               value={price}
-              onChange={(event) => setPrice(event.target.value)} />
+              onChange={(event) => setPrice(parseInt(event.target.value))} />
+            <Button className='floatRight' variant='contained' size="large" onClick={() => createItemDetails()}>ADD</Button>
           </div>
         </Box>
       </div>) :
@@ -184,11 +226,21 @@ function Inward() {
               <h2>
                 Inward Item Details
               </h2>
-              <Button onClick={() => dispatch(openAdd())}>Add</Button>
+              <Button variant='contained' size="large" onClick={() => dispatch(openAdd())}>Add</Button>
             </div>
             <hr />
           </>
         )}
+      {itemDetailsList && itemDetailsList.length > 0 ?
+        (<InwardTable itemDetailsList={itemDetailsList} />) 
+        : <></>}
+      
+      <Button className="spaceAround"
+        variant="contained"
+        color="success"
+      onClick={handleSaveInward}>
+        Success
+      </Button>
     </div>
   )
 }

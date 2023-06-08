@@ -31,3 +31,13 @@ h2 {
           align-items: center;
           justify-content: space-between;
         }
+
+        .floatRight{
+          float: right;
+        }
+
+        .spaceAround{
+          margin: 10px;
+          padding: 10px;
+          position: absolute;
+        }
