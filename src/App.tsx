@@ -5,6 +5,7 @@ import Home from './pages/Home/Home';
 import Inward from './pages/Inward/Inward';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ItemDetails from './pages/Inward/ItemDetails';
+import InwardList from './pages/InwardList/InwardList';
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -14,8 +15,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Login setLoggedIn={setLoggedIn} />} />
         <Route path="home" element={<Home />} />
-        <Route path="inward" element={<Inward />} />
+        <Route path="inward/add" element={<Inward />} />
         <Route path="inwardDetails" element={<ItemDetails />} />
+        <Route path='inward' element={<InwardList/>}/>
       </Routes>
     </BrowserRouter>
   );

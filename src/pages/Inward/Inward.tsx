@@ -72,7 +72,13 @@ function Inward() {
       partyId: parseInt(party),
       stockAreaId: parseInt(stockArea),
       grnNumber: slipNo,
-      inwardItemDetails: itemDetailsList
+      inwardItemDetails: itemDetailsList,
+      party: null,
+      stockArea: null,
+      totalWeight: 0,
+      totalAmount: 0,
+      approvalStatus: null,
+      id: null
     }
     console.log(inwardDto);
     axios.post('http://3.109.238.224:20080/api/v1/chemical/inward/save/v3',inwardDto, { headers })
@@ -239,7 +245,7 @@ function Inward() {
         variant="contained"
         color="success"
       onClick={handleSaveInward}>
-        Success
+        Save
       </Button>
     </div>
   )
